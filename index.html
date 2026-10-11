@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskFlow | Your productivity, in flow</title>
+  
+  <!-- PWA & Mobile Web App Meta -->
+  <meta name="theme-color" content="#0b0e16" />
+  <meta name="description" content="A thoughtful workspace to plan your day, focus on what matters, and make progress." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="TaskFlow" />
+
+  <!-- App Icons & Manifest -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dashboard-body">
+
+  <div class="app-layout">
+    <!-- Mobile Navigation Toggle -->
+    <button id="mobile-sidebar-toggle" class="mobile-toggle-btn" aria-label="Toggle navigation menu" aria-controls="sidebar" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+
+    <!-- Fixed Left Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <img src="icons/icon.svg" alt="TaskFlow Checklist Logo" class="brand-logo-img" width="38" height="38" />
+          <div class="logo-text">
+            <span class="brand-name">TaskFlow</span>
+            <span class="brand-sub">YOUR FOCUS, IN FLOW</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Dashboard views">
+        <div class="nav-group">
+          <span class="nav-group-title">Overview</span>
+          <button class="nav-item active" data-filter="all" aria-current="page">
+            <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="11" width="7" height="10" rx="2"/><rect x="3" y="14" width="8" height="7" rx="2"/></svg></span>
+            <span class="nav-label">Dashboard</span>
+            <span class="nav-badge" id="badge-all">0</span>
+          </button>
+          <button class="nav-item" data-filter="all-tasks">
+            <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="m3 6 1 1 2-2m-3 7 1 1 2-2m-3 7 1 1 2-2"/></svg></span>
+            <span class="nav-label">My Tasks</span>
+          </button>
+          <button class="nav-item" data-filter="today">
+            <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42m0-14.14-1.42 1.42m-11.3 11.3-1.42 1.42"/></svg></span>
+            <span class="nav-label">Today</span>
+            <span class="nav-badge" id="badge-today">0</span>
+          </button>
+          <button class="nav-item" data-filter="upcoming">
+            <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M16 3v4M8 3v4M3 10h18m-13 4h3m-3 3h7"/></svg></span>
+            <span class="nav-label">Upcoming</span>
+            <span class="nav-badge" id="badge-upcoming">0</span>
+          </button>
+          <button class="nav-item" data-filter="completed">
+            <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16.5 9"/></svg></span>
+            <span class="nav-label">Completed</span>
+            <span class="nav-badge" id="badge-completed">0</span>
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <span class="nav-group-title">Categories</span>
+          <button class="nav-item" data-filter="work">
+            <span class="nav-dot dot-work"></span>
+            <span class="nav-label">Work</span>
+            <span class="nav-badge" id="badge-work">0</span>
+          </button>
+          <button class="nav-item" data-filter="personal">
+            <span class="nav-dot dot-personal"></span>
+            <span class="nav-label">Personal</span>
+            <span class="nav-badge" id="badge-personal">0</span>
+          </button>
+          <button class="nav-item" data-filter="study">
+            <span class="nav-dot dot-study"></span>
+            <span class="nav-label">Study</span>
+            <span class="nav-badge" id="badge-study">0</span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="install-pwa-btn" class="install-pwa-btn" hidden>
+          <span class="install-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg></span>
+          <span>Install TaskFlow</span>
+        </button>
+        <div class="user-chip">
+          <div class="user-avatar" aria-hidden="true">TF</div>
+          <div class="user-info">
+            <span class="user-name">Personal workspace</span>
+            <span class="user-role">Saved on this device</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Sidebar Backdrop for Mobile -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
+    <!-- Main Content Area (Spacious Dashboard) -->
+    <main class="main-content">
+      <!-- Top Action Bar -->
+      <header class="top-bar">
+        <button type="button" id="sidebar-collapse-btn" class="sidebar-collapse-btn" aria-label="Collapse sidebar" aria-pressed="false" title="Collapse sidebar">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16m5-11 2 3-2 3"/></svg>
+        </button>
+        <div class="search-sort-group">
+          <div class="search-container">
+            <span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/></svg></span>
+            <input
+              type="search"
+              id="search-input"
+              class="search-input"
+              placeholder="Search tasks by title or description..."
+              autocomplete="off"
+              aria-label="Search tasks"
+            />
+          </div>
+
+          <div class="sort-container">
+            <label for="sort-select" class="visually-hidden">Sort tasks</label>
+            <span class="sort-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4v16m0 0-4-4m4 4 4-4M16 20V4m0 0-4 4m4-4 4 4"/></svg></span>
+            <select id="sort-select" class="sort-select" aria-label="Sort tasks">
+              <option value="priority-desc" selected>Priority first</option>
+              <option value="newest">Recently added</option>
+              <option value="date-asc">Due Date (Earliest)</option>
+              <option value="title-asc">Title (A–Z)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="top-bar-meta">
+          <span id="offline-pill" class="offline-pill" hidden aria-live="polite">⚡ Offline Mode</span>
+          <div class="date-badge" id="current-date-badge">
+            <span class="date-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></span>
+            <span id="current-date-text">Loading date...</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Welcome Banner -->
+      <section class="welcome-section">
+        <div class="welcome-content">
+          <span class="eyebrow" id="welcome-eyebrow">YOUR SPACE TO MAKE PROGRESS</span>
+          <h1 class="welcome-heading">Make space for what matters.</h1>
+          <p class="welcome-sub">A little progress, consistently, adds up to remarkable things.</p>
+        </div>
+        <div class="welcome-actions">
+          <button type="button" id="quick-add-btn" class="btn btn-primary quick-new-task-btn">
+            <span class="btn-icon" aria-hidden="true">+</span>
+            <span>Add a task</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Summary Metrics Cards Grid (Clickable Filters) -->
+      <section class="metrics-grid" aria-label="Task metrics summary">
+        <div class="metric-card card-total" role="button" tabindex="0" data-metric-filter="all" aria-label="View all tasks">
+          <div class="metric-header">
+            <span class="metric-title">Total Tasks</span>
+            <span class="metric-icon metric-icon-total" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5H5v16h14V5h-3M9 3h6v4H9zM8 12h8m-8 4h8"/></svg></span>
+          </div>
+          <div class="metric-value" id="metric-total">0</div>
+          <p class="metric-footnote">All tracked items · Click to view</p>
+        </div>
+
+        <div class="metric-card card-completed" role="button" tabindex="0" data-metric-filter="completed" aria-label="View completed tasks">
+          <div class="metric-header">
+            <span class="metric-title">Completed</span>
+            <span class="metric-icon metric-icon-completed" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16.5 9"/></svg></span>
+          </div>
+          <div class="metric-value" id="metric-completed">0</div>
+          <p class="metric-footnote" id="metric-completed-rate">0% done · Click to view</p>
+        </div>
+
+        <div class="metric-card card-pending" role="button" tabindex="0" data-metric-filter="pending" aria-label="View pending tasks">
+          <div class="metric-header">
+            <span class="metric-title">Pending</span>
+            <span class="metric-icon metric-icon-pending" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          </div>
+          <div class="metric-value" id="metric-pending">0</div>
+          <p class="metric-footnote">Remaining · Click to view</p>
+        </div>
+
+        <div class="metric-card card-overdue" role="button" tabindex="0" data-metric-filter="overdue" aria-label="View overdue tasks">
+          <div class="metric-header">
+            <span class="metric-title">Overdue</span>
+            <span class="metric-icon metric-icon-overdue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4L12 3Z"/><path d="M12 9v5m0 3h.01"/></svg></span>
+          </div>
+          <div class="metric-value" id="metric-overdue">0</div>
+          <p class="metric-footnote">Requires attention · Click to view</p>
+        </div>
+      </section>
+
+      <!-- Task Completion Progress Bar Section -->
+      <section class="progress-section" aria-label="Overall completion progress">
+        <div class="progress-header">
+          <div class="progress-copy"><span class="progress-title">Your progress</span><span id="progress-summary" class="progress-summary">A fresh start is a good start.</span></div>
+          <span class="progress-percentage" id="progress-percentage">0%</span>
+        </div>
+        <div class="progress-track" role="progressbar" aria-label="Task completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-track">
+          <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+        </div>
+      </section>
+
+      <!-- Task Creation Card -->
+      <section class="task-form-card" aria-label="Create new task">
+        <h2 class="card-title">Add New Task</h2>
+        <form id="task-form" class="dashboard-task-form" novalidate>
+          <div class="form-row main-input-row">
+            <div class="input-wrapper">
+              <label for="task-input" class="visually-hidden">Task title</label>
+              <span class="input-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m15 5 4 4M4 20l4-.8L19 8a2.8 2.8 0 0 0-4-4L4 15l-0 5Z"/></svg></span>
+              <input
+                type="text"
+                id="task-input"
+                class="form-input text-input"
+                placeholder="What do you need to do?"
+                autocomplete="off"
+                maxlength="150"
+                required
+              />
+            </div>
+            <button type="submit" id="add-task-btn" class="btn btn-primary">
+              <span class="btn-icon" aria-hidden="true">+</span>
+              <span>Add Task</span>
+            </button>
+          </div>
+
+          <details class="task-options">
+            <summary>Customize task <span>Description, category, date &amp; priority</span></summary>
+            <div class="task-options-fields">
+              <div class="form-row">
+                <div class="form-field description-field">
+                  <label for="task-description" class="field-label">Description <span>(optional)</span></label>
+                  <textarea id="task-description" class="form-input form-textarea" maxlength="500" rows="2" placeholder="Add a few details to help you get started"></textarea>
+                </div>
+              </div>
+              <div class="form-row secondary-input-row">
+                <div class="form-field">
+                  <label for="task-category" class="field-label">Category</label>
+                  <select id="task-category" class="form-select">
+                    <option value="work">Work</option>
+                    <option value="personal">Personal</option>
+                    <option value="study">Study</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="task-due-date" class="field-label">Due Date</label>
+                  <input type="date" id="task-due-date" class="form-input date-input" />
+                </div>
+                <div class="form-field">
+                  <label for="task-priority" class="field-label">Priority</label>
+                  <select id="task-priority" class="form-select">
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="low">Low</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <p id="input-error" class="input-error" role="alert" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <div class="dashboard-grid">
+      <!-- Tasks List Section -->
+      <section class="task-board-section" aria-label="Tasks board">
+        <div class="board-header">
+          <div class="board-title-group">
+            <div><span class="section-kicker">YOUR WORKSPACE</span><h2 class="board-title" id="current-view-title">My Tasks</h2></div>
+            <span class="task-counter" id="task-counter">0 tasks</span>
+          </div>
+
+          <div class="board-actions">
+            <label for="priority-filter" class="visually-hidden">Filter tasks by priority</label>
+            <select id="priority-filter" class="form-select priority-filter">
+              <option value="all">All priorities</option>
+              <option value="high">High priority</option>
+              <option value="medium">Medium priority</option>
+              <option value="low">Low priority</option>
+            </select>
+            <button type="button" id="clear-completed-btn" class="btn btn-ghost" title="Clear all completed tasks">
+              Clear Completed
+            </button>
+          </div>
+        </div>
+
+        <!-- Empty State Container -->
+        <div id="empty-state" class="empty-state" hidden>
+          <div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5H5v16h14V5h-3M9 3h6v4H9zM8 12h8m-8 4h5"/></svg></div>
+          <p class="empty-title">No tasks found</p>
+          <p class="empty-desc" id="empty-state-desc">You are all caught up! Use the form above to add a new task.</p>
+        </div>
+
+        <!-- Dynamic Task List -->
+        <ul id="task-list" class="task-list" aria-label="Task list"></ul>
+      </section>
+      <aside class="dashboard-rail" aria-label="Productivity overview">
+        <section class="rail-card focus-card" aria-labelledby="focus-title">
+          <div class="rail-card-heading">
+            <div><span class="section-kicker">STAY IN RHYTHM</span><h2 id="focus-title">Today at a glance</h2></div>
+            <span class="rail-heading-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          </div>
+          <p id="today-summary" class="today-summary">Your day is yours to shape.</p>
+          <div class="today-stat-row"><span>Due today</span><strong id="today-due-count">0</strong></div>
+          <div class="today-stat-row"><span>High priority</span><strong id="high-priority-count">0</strong></div>
+        </section>
+        <section class="rail-card deadlines-card" aria-labelledby="deadlines-title">
+          <div class="rail-card-heading">
+            <div><span class="section-kicker">COMING UP</span><h2 id="deadlines-title">Next deadlines</h2></div>
+            <button type="button" class="rail-link" data-filter="upcoming">View all <span aria-hidden="true">→</span></button>
+          </div>
+          <ul id="upcoming-list" class="upcoming-list" aria-live="polite"></ul>
+          <p id="upcoming-empty" class="upcoming-empty" hidden>No upcoming deadlines. Enjoy the breathing room.</p>
+        </section>
+        <section class="rail-card progress-insight-card">
+          <span class="section-kicker">SMALL STEPS COUNT</span>
+          <p id="productivity-insight" class="productivity-insight">Every task you finish is momentum in motion.</p>
+          <button type="button" class="insight-link" data-filter="completed">See completed tasks <span aria-hidden="true">→</span></button>
+        </section>
+      </aside>
+      </div>
+    </main>
+  </div>
+  <nav class="mobile-bottom-nav" aria-label="Quick navigation">
+    <button class="nav-item active" data-filter="all" aria-label="Dashboard" aria-current="page"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="11" width="7" height="10" rx="2"/><rect x="3" y="14" width="8" height="7" rx="2"/></svg></span><span class="mobile-nav-label">Home</span></button>
+    <button class="nav-item" data-filter="today" aria-label="Today's tasks"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2"/></svg></span><span class="mobile-nav-label">Today</span></button>
+    <button class="nav-item" data-filter="upcoming" aria-label="Upcoming tasks"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></span><span class="mobile-nav-label">Upcoming</span></button>
+    <button class="nav-item" data-filter="completed" aria-label="Completed tasks"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16.5 9"/></svg></span><span class="mobile-nav-label">Done</span></button>
+  </nav>
+
+  <!-- Edit Task Modal -->
+  <div id="edit-modal" class="modal-overlay" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h3 id="modal-title" class="modal-title">Edit Task</h3>
+        <button type="button" id="modal-close-btn" class="modal-close-btn" aria-label="Close dialog">✕</button>
+      </div>
+      <form id="edit-form" class="modal-form">
+        <input type="hidden" id="edit-task-id" />
+        <div class="modal-field">
+          <label for="edit-task-text" class="field-label">Task Title</label>
+          <input type="text" id="edit-task-text" class="form-input" required maxlength="150" />
+        </div>
+        <div class="modal-field">
+          <label for="edit-task-description" class="field-label">Description <span>(optional)</span></label>
+          <textarea id="edit-task-description" class="form-input form-textarea" maxlength="500" rows="3"></textarea>
+        </div>
+        <div class="modal-grid">
+          <div class="modal-field">
+            <label for="edit-task-category" class="field-label">Category</label>
+            <select id="edit-task-category" class="form-select">
+              <option value="work">Work</option>
+              <option value="personal">Personal</option>
+              <option value="study">Study</option>
+            </select>
+          </div>
+          <div class="modal-field">
+            <label for="edit-task-due-date" class="field-label">Due Date</label>
+            <input type="date" id="edit-task-due-date" class="form-input" />
+          </div>
+          <div class="modal-field">
+            <label for="edit-task-priority" class="field-label">Priority</label>
+            <select id="edit-task-priority" class="form-select">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="modal-cancel-btn" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container (Accessible Undo alerts) -->
+  <div id="toast-container" class="toast-container" role="status" aria-live="polite"></div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

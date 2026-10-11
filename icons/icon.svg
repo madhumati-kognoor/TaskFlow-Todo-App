@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120" />
+      <stop offset="100%" stop-color="#070b14" />
+    </linearGradient>
+    <linearGradient id="clipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+    </radialGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.6" />
+    </filter>
+  </defs>
+
+  <!-- App Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+  <circle cx="256" cy="256" r="210" fill="url(#glowGrad)" />
+
+  <!-- Clipboard Body -->
+  <rect x="106" y="96" width="300" height="336" rx="36" fill="#111a2e" stroke="#38bdf8" stroke-width="8" filter="url(#shadow)" />
+
+  <!-- Clipboard Clip -->
+  <rect x="186" y="74" width="140" height="44" rx="16" fill="url(#clipGrad)" stroke="#070b14" stroke-width="4" />
+
+  <!-- Item 1 (Checked) -->
+  <rect x="150" y="176" width="44" height="44" rx="12" fill="#38bdf8" />
+  <path d="M162 198 L172 208 L184 186" fill="none" stroke="#041324" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="216" y="190" width="150" height="14" rx="7" fill="#f8fafc" />
+
+  <!-- Item 2 (Checked) -->
+  <rect x="150" y="248" width="44" height="44" rx="12" fill="#38bdf8" />
+  <path d="M162 270 L172 280 L184 258" fill="none" stroke="#041324" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="216" y="262" width="120" height="14" rx="7" fill="#f8fafc" />
+
+  <!-- Item 3 (Unchecked) -->
+  <rect x="150" y="320" width="44" height="44" rx="12" fill="none" stroke="#475569" stroke-width="4" />
+  <rect x="216" y="334" width="95" height="14" rx="7" fill="#64748b" />
+</svg>
